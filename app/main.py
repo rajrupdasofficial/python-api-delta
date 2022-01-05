@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from random import randrange
 import psycopg2
 from psycopg2.extras import RealDictCursor
+import time
 
 app=FastAPI()
 
@@ -15,13 +16,17 @@ class Post(BaseModel):
     published:bool=True
     #rating:Optional[int]=None
 
-try:
-    conn=psycopg2.connect(host='localhost',database='fastapi',port='5432',user='postgres',password='passkey',cursor_factory=RealDictCursor)
-    cursor=conn.cursor
-    print("Connected")
-except Exception as e:
-    print("Connection to database failed")
-    print("Error",e)
+#connetction statement for postgres database
+while True:
+    try:
+        conn=psycopg2.connect(host='localhost',database='fastapi',port='5432',user='postgres',password='passkey',cursor_factory=RealDictCursor)
+        cursor=conn.cursor
+        print("Connected")
+        break
+    except Exception as e:
+        print("Connection to database failed")
+        print("Error",e)
+        time.sleep(2)
 
 
 #simple structures 
